@@ -7,7 +7,7 @@ spec:
   selector:
     app: argocd-demo
   ports:
-    - port: 80
+    - port: 3000
       targetPort: 3000
       nodePort: 30007
     - port: 3000
