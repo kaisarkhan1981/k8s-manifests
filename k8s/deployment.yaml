@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: argocd-demo
-        image: kaisarkhan1981/argocd-demo:v1
+        image: kaisarkhan1981/argocd-demo
         ports:
         - containerPort: 3000
