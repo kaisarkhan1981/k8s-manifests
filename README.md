@@ -154,23 +154,39 @@ spec:
 8. GitHub Actions CI/CD
 Mkdir –p .github/workflows
 .github/workflows/docker-build.yml
-
+```
+name: Build and Push Docker Image
 name: Build and Push Docker Image
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
+
     - uses: docker/setup-buildx-action@v3
+
     - uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - run: |
+
+    - name: Build and push
+      run: |
         docker build -t kaisarkhan1981/argocd-demo:${{ github.sha }} .
         docker push kaisarkhan1981/argocd-demo:${{ github.sha }}
+
+    - name: Update deployment image tag
+      run: |
+        git config user.name "github-actions"
+        git config user.email "actions@github.com"
+        sed -i "s|image: kaisarkhan1981/argocd-demo:.*|image: kaisarkhan1981/argocd-demo:${{ github.sha }}|g" k8s/deployment.yaml
+        git commit -am "Update image to ${{ github.sha }}" || echo "No changes"
+        git push
         
+    ```
 9. Create secret on github for docker user and tokens
 Personal Access Tokens (Classic)
 https://github.com/settings/tokens
