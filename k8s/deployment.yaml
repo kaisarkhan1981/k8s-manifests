@@ -15,6 +15,6 @@ spec:
       containers:
       - name: argocd-demo
         image: kaisarkhan1981/argocd-demo
-        image: kaisarkhan1981/argocd-demo:latest
+        image: kaisarkhan1981/argocd-demo:${{ github.sha }} 
         ports:
         - containerPort: 3000
